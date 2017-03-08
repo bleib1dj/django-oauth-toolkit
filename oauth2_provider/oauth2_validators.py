@@ -418,6 +418,11 @@ class OAuth2Validator(RequestValidator):
         """
         Check username and password correspond to a valid and active User
         """
+        try:
+            user = User.objects.get(email=username)
+            username = user.username
+        except User.DoesNotExist:
+            pass
         u = authenticate(username=username, password=password)
         if u is not None and u.is_active:
             request.user = u
